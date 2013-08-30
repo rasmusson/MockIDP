@@ -96,8 +96,8 @@ import org.xml.sax.SAXException;
 @WebServlet(urlPatterns = "/openam/ArtifactResolver/metaAlias/idp")
 public class MockIDPArtifactResolve extends HttpServlet {
 
-	private static final String CONSUMER_URL = "https://admin-dev:2081/saml/consumer";
-	private static final String AudienceURI = "dev1";
+	private static final String CONSUMER_URL = "http://openam.steras.no:8080/openam-server-10.1.0-Xpress/Consumer/metaAlias/sp";
+	private static final String AudienceURI = "steras-openam";
 	private static String IDP_ENITIY_ID = "FakeIdP";
 	private static String SP_DESTINATION = CONSUMER_URL;
 
@@ -112,8 +112,8 @@ public class MockIDPArtifactResolve extends HttpServlet {
 
 	@Override
 	protected void doPost(final HttpServletRequest arg0, final HttpServletResponse arg1) throws ServletException, IOException {
-		System.out.println();
-
+		System.out.println("post");
+		arg1.setContentType("text/xml");
 		try {
 			ArtifactResolve artifactResolve = unmarshallArtifactResolve(arg0.getInputStream());
 
@@ -225,12 +225,18 @@ public class MockIDPArtifactResolve extends HttpServlet {
 		issuer.setValue(IDP_ENITIY_ID);
 		assertion.setIssuer(issuer);
 		assertion.setIssueInstant(new DateTime());
+		
+		assertion.setID(idGenerator.generateIdentifier());
 
 		Subject subject = buildXMLObjectDefaultName(Subject.class);
 		assertion.setSubject(subject);
 
 		NameID nameID = buildXMLObjectDefaultName(NameID.class);
 		nameID.setFormat(NameIDType.TRANSIENT);
+		nameID.setValue("5VkzP/MZ1PMJ62o45/7DdFms9y7K");
+		nameID.setSPNameQualifier("steras-openam");
+		nameID.setNameQualifier("FakeIdP");
+		
 		subject.setNameID(nameID);
 
 		subject.getSubjectConfirmations().add(buildSubjectConfirmation());
@@ -264,9 +270,11 @@ public class MockIDPArtifactResolve extends HttpServlet {
 		AuthnStatement authnStatement = buildXMLObjectDefaultName(AuthnStatement.class);
 		AuthnContext authnContext = buildXMLObjectDefaultName(AuthnContext.class);
 		AuthnContextClassRef authnContextClassRef = buildXMLObjectDefaultName(AuthnContextClassRef.class);
-		authnContextClassRef.setAuthnContextClassRef(AuthnContext.PASSWORD_AUTHN_CTX);
+		authnContextClassRef.setAuthnContextClassRef("urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport");
 		authnContext.setAuthnContextClassRef(authnContextClassRef);
 		authnStatement.setAuthnContext(authnContext);
+		
+		authnStatement.setAuthnInstant(new DateTime());
 
 		return authnStatement;
 	}
@@ -385,7 +393,7 @@ public class MockIDPArtifactResolve extends HttpServlet {
 	private X509Credential getCredentialFromKeystore() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException,
 			SecurityException, java.security.cert.CertificateException {
 		KeyStore keystore = KeyStore.getInstance(KeyStore.getDefaultType());
-		InputStream inputStream = MockIDPArtifactResolve.class.getResourceAsStream("/keystore.jks");
+		InputStream inputStream = MockIDPArtifactResolve.class.getResourceAsStream("/keystore-idp.jks");
 		keystore.load(inputStream, "changeit".toCharArray());
 		inputStream.close();
 
@@ -399,23 +407,21 @@ public class MockIDPArtifactResolve extends HttpServlet {
 		return (X509Credential)resolver.resolveSingle(criteriaSet);
 	}
 
-	private X509Credential getAdminPublicKey() throws KeyStoreException, NoSuchAlgorithmException, java.security.cert.CertificateException, IOException,
-			SecurityException, NoSuchProviderException {
-		Security.addProvider(new BouncyCastleProvider());
+	private X509Credential getAdminPublicKey() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException,
+                        SecurityException, java.security.cert.CertificateException {
+		KeyStore keystore = KeyStore.getInstance(KeyStore.getDefaultType());
+                InputStream inputStream = MockIDPArtifactResolve.class.getResourceAsStream("/keystore-sp.jks");
+                keystore.load(inputStream, "changeit".toCharArray());
+                inputStream.close();
 
-		KeyStore keystore = KeyStore.getInstance("PKCS12", "BC");
-		InputStream inputStream = MockIDPArtifactResolve.class.getResourceAsStream("/vcs.p12");
-		keystore.load(inputStream, "IAT4CMC6KX4T95FG2AKH".toCharArray());
-		keystore.aliases();
+                Map<String, String> passwordMap = new HashMap<String, String>();
+                passwordMap.put("test", "changeit");
+                KeyStoreCredentialResolver resolver = new KeyStoreCredentialResolver(keystore, passwordMap);
 
-		Map<String, String> passwordMap = new HashMap<String, String>();
-		passwordMap.put("1", "IAT4CMC6KX4T95FG2AKH");
-		KeyStoreCredentialResolver resolver = new KeyStoreCredentialResolver(keystore, passwordMap);
+                Criteria criteria = new EntityIDCriteria("test");
+                CriteriaSet criteriaSet = new CriteriaSet(criteria);
 
-		Criteria criteria = new EntityIDCriteria("1");
-		CriteriaSet criteriaSet = new CriteriaSet(criteria);
-
-		return (X509Credential)resolver.resolveSingle(criteriaSet);
+                return (X509Credential)resolver.resolveSingle(criteriaSet);
 	}
 
 	public static void printSAMLObject(final XMLObject object, final PrintWriter writer) {

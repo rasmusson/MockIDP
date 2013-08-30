@@ -70,6 +70,6 @@ public class MockIDPAuthnReq extends HttpServlet {
 
 		userId = req.getParameter("username");
 		secLevel = req.getParameter("secLevel");
-		resp.sendRedirect("https://admin-dev:2081/saml/consumer?SAMLart=1");
+		resp.sendRedirect("http://openam.steras.no:8080/openam-server-10.1.0-Xpress/Consumer/metaAlias/sp?SAMLart=AAQAAMFbLinlXaCM%2BFIxiDwGOLAy2T71gbpO7ZhNzAgEANlB90ECfpNEVLg%3D");
 	}
 }
