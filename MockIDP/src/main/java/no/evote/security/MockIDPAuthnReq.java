@@ -42,7 +42,7 @@ public class MockIDPAuthnReq extends HttpServlet {
 		resp.setContentType("text/html");
 		AuthnRequest authnRequest = unMarshallAuthnRequest(req);
 		authnReqId = authnRequest.getID();
-		
+
 		relayState = req.getParameter("RelayState");
 
 		w.append("<html>" + "<head></head>" + "<body> <form method=\"POST\">" + "Bruker ID: <input type=\"text\" name=\"username\" /> " + "<br/>"
@@ -73,6 +73,7 @@ public class MockIDPAuthnReq extends HttpServlet {
 
 		userId = req.getParameter("username");
 		secLevel = req.getParameter("secLevel");
-		resp.sendRedirect("http://openam.steras.no:8080/openam-server-10.1.0-Xpress/Consumer/metaAlias/sp?SAMLart=AAQAAMFbLinlXaCM%2BFIxiDwGOLAy2T71gbpO7ZhNzAgEANlB90ECfpNEVLg%3D&RelayState=" + relayState);
+		resp.sendRedirect(MockIDPProperties.getSpConsumerUrl() + "?SAMLart=AAQAAMFbLinlXaCM%2BFIxiDwGOLAy2T71gbpO7ZhNzAgEANlB90ECfpNEVLg%3D&RelayState="
+				+ relayState);
 	}
 }

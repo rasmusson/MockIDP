@@ -8,7 +8,6 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-import java.security.Security;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,7 +28,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.jdom2.JDOMException;
 import org.joda.time.DateTime;
 import org.opensaml.Configuration;
@@ -95,11 +93,6 @@ import org.xml.sax.SAXException;
 
 @WebServlet(urlPatterns = "/openam/ArtifactResolver/metaAlias/idp")
 public class MockIDPArtifactResolve extends HttpServlet {
-
-	private static final String CONSUMER_URL = "http://openam.steras.no:8080/openam-server-10.1.0-Xpress/Consumer/metaAlias/sp";
-	private static final String AudienceURI = "steras-openam";
-	private static String IDP_ENITIY_ID = "FakeIdP";
-	private static String SP_DESTINATION = CONSUMER_URL;
 
 	@Override
 	protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
@@ -179,10 +172,10 @@ public class MockIDPArtifactResolve extends HttpServlet {
 		ArtifactResponse artifactResponse = buildXMLObjectDefaultName(ArtifactResponse.class);
 
 		Issuer issuer = buildXMLObjectDefaultName(Issuer.class);
-		issuer.setValue(IDP_ENITIY_ID);
+		issuer.setValue(MockIDPProperties.getIdpEntityId());
 		artifactResponse.setIssuer(issuer);
 		artifactResponse.setIssueInstant(new DateTime());
-		artifactResponse.setDestination(SP_DESTINATION);
+		artifactResponse.setDestination(MockIDPProperties.getSpConsumerUrl());
 
 		artifactResponse.setID(idGenerator.generateIdentifier());
 
@@ -193,12 +186,12 @@ public class MockIDPArtifactResolve extends HttpServlet {
 		artifactResponse.setStatus(status);
 
 		Response response = buildXMLObjectDefaultName(Response.class);
-		response.setDestination(SP_DESTINATION);
+		response.setDestination(MockIDPProperties.getSpConsumerUrl());
 		response.setIssueInstant(new DateTime());
 		response.setID(idGenerator.generateIdentifier());
 		response.setInResponseTo(MockIDPAuthnReq.authnReqId);
 		Issuer issuer2 = buildXMLObjectDefaultName(Issuer.class);
-		issuer2.setValue(IDP_ENITIY_ID);
+		issuer2.setValue(MockIDPProperties.getIdpEntityId());
 
 		response.setIssuer(issuer2);
 
@@ -222,10 +215,10 @@ public class MockIDPArtifactResolve extends HttpServlet {
 		Assertion assertion = buildXMLObjectDefaultName(Assertion.class);
 
 		Issuer issuer = buildXMLObjectDefaultName(Issuer.class);
-		issuer.setValue(IDP_ENITIY_ID);
+		issuer.setValue(MockIDPProperties.getIdpEntityId());
 		assertion.setIssuer(issuer);
 		assertion.setIssueInstant(new DateTime());
-		
+
 		assertion.setID(idGenerator.generateIdentifier());
 
 		Subject subject = buildXMLObjectDefaultName(Subject.class);
@@ -236,7 +229,7 @@ public class MockIDPArtifactResolve extends HttpServlet {
 		nameID.setValue("5VkzP/MZ1PMJ62o45/7DdFms9y7K");
 		nameID.setSPNameQualifier("steras-openam");
 		nameID.setNameQualifier("FakeIdP");
-		
+
 		subject.setNameID(nameID);
 
 		subject.getSubjectConfirmations().add(buildSubjectConfirmation());
@@ -247,7 +240,7 @@ public class MockIDPArtifactResolve extends HttpServlet {
 
 		assertion.getAuthnStatements().add(buildAuthnStatement());
 
-		signSAMLObject(assertion, getCredentialFromKeystore());
+		signSAMLObject(assertion, getIDPKeyFromKeystore());
 		return assertion;
 	}
 
@@ -259,7 +252,7 @@ public class MockIDPArtifactResolve extends HttpServlet {
 		subjectConfirmationData.setInResponseTo(MockIDPAuthnReq.authnReqId);
 		subjectConfirmationData.setNotBefore(new DateTime().minusDays(2));
 		subjectConfirmationData.setNotOnOrAfter(new DateTime().plusDays(2));
-		subjectConfirmationData.setRecipient(CONSUMER_URL);
+		subjectConfirmationData.setRecipient(MockIDPProperties.getSpConsumerUrl());
 
 		subjectConfirmation.setSubjectConfirmationData(subjectConfirmationData);
 
@@ -273,7 +266,7 @@ public class MockIDPArtifactResolve extends HttpServlet {
 		authnContextClassRef.setAuthnContextClassRef("urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport");
 		authnContext.setAuthnContextClassRef(authnContextClassRef);
 		authnStatement.setAuthnContext(authnContext);
-		
+
 		authnStatement.setAuthnInstant(new DateTime());
 
 		return authnStatement;
@@ -285,7 +278,7 @@ public class MockIDPArtifactResolve extends HttpServlet {
 		conditions.setNotOnOrAfter(new DateTime().plusDays(2));
 		AudienceRestriction audienceRestriction = buildXMLObjectDefaultName(AudienceRestriction.class);
 		Audience audience = buildXMLObjectDefaultName(Audience.class);
-		audience.setAudienceURI(AudienceURI);
+		audience.setAudienceURI(MockIDPProperties.getAudienceUri());
 		audienceRestriction.getAudiences().add(audience);
 		conditions.getAudienceRestrictions().add(audienceRestriction);
 		return conditions;
@@ -318,7 +311,7 @@ public class MockIDPArtifactResolve extends HttpServlet {
 
 	private EncryptedAssertion encryptAssertion(final Assertion assertion) throws KeyStoreException, NoSuchAlgorithmException, CertificateException,
 			IOException, SecurityException, EncryptionException, java.security.cert.CertificateException, NoSuchProviderException {
-		Credential keyEncryptionCredential = getAdminPublicKey();
+		Credential keyEncryptionCredential = getSPPublicKey();
 
 		EncryptionParameters encParams = new EncryptionParameters();
 		encParams.setAlgorithm(EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES128);
@@ -390,7 +383,7 @@ public class MockIDPArtifactResolve extends HttpServlet {
 		return envelope;
 	}
 
-	private X509Credential getCredentialFromKeystore() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException,
+	private X509Credential getIDPKeyFromKeystore() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException,
 			SecurityException, java.security.cert.CertificateException {
 		KeyStore keystore = KeyStore.getInstance(KeyStore.getDefaultType());
 		InputStream inputStream = MockIDPArtifactResolve.class.getResourceAsStream("/keystore-idp.jks");
@@ -407,21 +400,21 @@ public class MockIDPArtifactResolve extends HttpServlet {
 		return (X509Credential)resolver.resolveSingle(criteriaSet);
 	}
 
-	private X509Credential getAdminPublicKey() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException,
-                        SecurityException, java.security.cert.CertificateException {
+	private X509Credential getSPPublicKey() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException, SecurityException,
+			java.security.cert.CertificateException {
 		KeyStore keystore = KeyStore.getInstance(KeyStore.getDefaultType());
-                InputStream inputStream = MockIDPArtifactResolve.class.getResourceAsStream("/keystore-sp.jks");
-                keystore.load(inputStream, "changeit".toCharArray());
-                inputStream.close();
+		InputStream inputStream = MockIDPArtifactResolve.class.getResourceAsStream("/keystore-sp.jks");
+		keystore.load(inputStream, "changeit".toCharArray());
+		inputStream.close();
 
-                Map<String, String> passwordMap = new HashMap<String, String>();
-                passwordMap.put("test", "changeit");
-                KeyStoreCredentialResolver resolver = new KeyStoreCredentialResolver(keystore, passwordMap);
+		Map<String, String> passwordMap = new HashMap<String, String>();
+		passwordMap.put("test", "changeit");
+		KeyStoreCredentialResolver resolver = new KeyStoreCredentialResolver(keystore, passwordMap);
 
-                Criteria criteria = new EntityIDCriteria("test");
-                CriteriaSet criteriaSet = new CriteriaSet(criteria);
+		Criteria criteria = new EntityIDCriteria("test");
+		CriteriaSet criteriaSet = new CriteriaSet(criteria);
 
-                return (X509Credential)resolver.resolveSingle(criteriaSet);
+		return (X509Credential)resolver.resolveSingle(criteriaSet);
 	}
 
 	public static void printSAMLObject(final XMLObject object, final PrintWriter writer) {
