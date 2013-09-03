@@ -108,6 +108,7 @@ public class MockIDPArtifactResolve extends HttpServlet {
 	protected void doPost(final HttpServletRequest arg0, final HttpServletResponse arg1) throws ServletException, IOException {
 		System.out.println("post");
 		arg1.setContentType("text/xml");
+
 		try {
 			ArtifactResolve artifactResolve = unmarshallArtifactResolve(arg0.getInputStream());
 
@@ -115,14 +116,28 @@ public class MockIDPArtifactResolve extends HttpServlet {
 			artifactResponse.setInResponseTo(artifactResolve.getID());
 
 			printSAMLObject(wrapInSOAPEnvelope(artifactResponse), arg1.getWriter());
-		} catch (UnmarshallingException | IllegalAccessException | NoSuchAlgorithmException | KeyStoreException | java.security.cert.CertificateException
-				| CertificateException | SecurityException | EncryptionException e) {
+		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (XMLParserException e) {
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (KeyStoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (java.security.cert.CertificateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (NoSuchProviderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CertificateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (EncryptionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SignatureException e) {
@@ -132,6 +147,12 @@ public class MockIDPArtifactResolve extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (MetadataProviderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnmarshallingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (XMLParserException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
