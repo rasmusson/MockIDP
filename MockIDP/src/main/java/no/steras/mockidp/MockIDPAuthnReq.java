@@ -1,4 +1,4 @@
-package no.evote.security;
+package no.steras.mockidp;
 
 import java.io.IOException;
 import java.io.Writer;
