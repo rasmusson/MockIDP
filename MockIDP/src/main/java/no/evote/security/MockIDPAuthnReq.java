@@ -14,6 +14,7 @@ import org.opensaml.common.SAMLObject;
 import org.opensaml.common.binding.BasicSAMLMessageContext;
 import org.opensaml.saml2.binding.decoding.HTTPRedirectDeflateDecoder;
 import org.opensaml.saml2.core.AuthnRequest;
+import org.opensaml.saml2.metadata.provider.MetadataProviderException;
 import org.opensaml.ws.message.decoder.MessageDecodingException;
 import org.opensaml.ws.transport.http.HttpServletRequestAdapter;
 import org.opensaml.xml.ConfigurationException;
@@ -73,7 +74,11 @@ public class MockIDPAuthnReq extends HttpServlet {
 
 		userId = req.getParameter("username");
 		secLevel = req.getParameter("secLevel");
-		resp.sendRedirect(MockIDPProperties.getSpConsumerUrl() + "?SAMLart=AAQAAMFbLinlXaCM%2BFIxiDwGOLAy2T71gbpO7ZhNzAgEANlB90ECfpNEVLg%3D&RelayState="
-				+ relayState);
+		try {
+			resp.sendRedirect(MockIDPSPMetadata.getSpConsumerUrl() + "?SAMLart=AAQAAMFbLinlXaCM%2BFIxiDwGOLAy2T71gbpO7ZhNzAgEANlB90ECfpNEVLg%3D&RelayState="
+					+ relayState);
+		} catch (MetadataProviderException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

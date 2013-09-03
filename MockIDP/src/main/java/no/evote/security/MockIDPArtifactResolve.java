@@ -58,6 +58,7 @@ import org.opensaml.saml2.core.SubjectConfirmation;
 import org.opensaml.saml2.core.SubjectConfirmationData;
 import org.opensaml.saml2.encryption.Encrypter;
 import org.opensaml.saml2.encryption.Encrypter.KeyPlacement;
+import org.opensaml.saml2.metadata.provider.MetadataProviderException;
 import org.opensaml.ws.soap.soap11.Body;
 import org.opensaml.ws.soap.soap11.Envelope;
 import org.opensaml.xml.XMLObject;
@@ -130,6 +131,9 @@ public class MockIDPArtifactResolve extends HttpServlet {
 		} catch (MarshallingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (MetadataProviderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 	}
@@ -166,7 +170,7 @@ public class MockIDPArtifactResolve extends HttpServlet {
 
 	private ArtifactResponse buildArtifactResponse() throws IllegalAccessException, NoSuchAlgorithmException, KeyStoreException,
 			java.security.cert.CertificateException, CertificateException, IOException, SecurityException, EncryptionException, NoSuchProviderException,
-			SignatureException, MarshallingException {
+			SignatureException, MarshallingException, MetadataProviderException {
 		SecureRandomIdentifierGenerator idGenerator = new SecureRandomIdentifierGenerator();
 
 		ArtifactResponse artifactResponse = buildXMLObjectDefaultName(ArtifactResponse.class);
@@ -175,7 +179,7 @@ public class MockIDPArtifactResolve extends HttpServlet {
 		issuer.setValue(MockIDPProperties.getIdpEntityId());
 		artifactResponse.setIssuer(issuer);
 		artifactResponse.setIssueInstant(new DateTime());
-		artifactResponse.setDestination(MockIDPProperties.getSpConsumerUrl());
+		artifactResponse.setDestination(MockIDPSPMetadata.getSpConsumerUrl());
 
 		artifactResponse.setID(idGenerator.generateIdentifier());
 
@@ -186,7 +190,7 @@ public class MockIDPArtifactResolve extends HttpServlet {
 		artifactResponse.setStatus(status);
 
 		Response response = buildXMLObjectDefaultName(Response.class);
-		response.setDestination(MockIDPProperties.getSpConsumerUrl());
+		response.setDestination(MockIDPSPMetadata.getSpConsumerUrl());
 		response.setIssueInstant(new DateTime());
 		response.setID(idGenerator.generateIdentifier());
 		response.setInResponseTo(MockIDPAuthnReq.authnReqId);
@@ -209,7 +213,7 @@ public class MockIDPArtifactResolve extends HttpServlet {
 	}
 
 	private Assertion buildAssertion() throws NoSuchAlgorithmException, IllegalAccessException, KeyStoreException, java.security.cert.CertificateException,
-			SignatureException, MarshallingException, CertificateException, IOException, SecurityException {
+			SignatureException, MarshallingException, CertificateException, IOException, SecurityException, MetadataProviderException {
 		SecureRandomIdentifierGenerator idGenerator = new SecureRandomIdentifierGenerator();
 
 		Assertion assertion = buildXMLObjectDefaultName(Assertion.class);
@@ -244,7 +248,7 @@ public class MockIDPArtifactResolve extends HttpServlet {
 		return assertion;
 	}
 
-	private SubjectConfirmation buildSubjectConfirmation() throws IllegalAccessException {
+	private SubjectConfirmation buildSubjectConfirmation() throws IllegalAccessException, MetadataProviderException {
 		SubjectConfirmation subjectConfirmation = buildXMLObjectDefaultName(SubjectConfirmation.class);
 		subjectConfirmation.setMethod(SubjectConfirmation.METHOD_BEARER);
 
@@ -252,7 +256,7 @@ public class MockIDPArtifactResolve extends HttpServlet {
 		subjectConfirmationData.setInResponseTo(MockIDPAuthnReq.authnReqId);
 		subjectConfirmationData.setNotBefore(new DateTime().minusDays(2));
 		subjectConfirmationData.setNotOnOrAfter(new DateTime().plusDays(2));
-		subjectConfirmationData.setRecipient(MockIDPProperties.getSpConsumerUrl());
+		subjectConfirmationData.setRecipient(MockIDPSPMetadata.getSpConsumerUrl());
 
 		subjectConfirmation.setSubjectConfirmationData(subjectConfirmationData);
 
@@ -278,7 +282,7 @@ public class MockIDPArtifactResolve extends HttpServlet {
 		conditions.setNotOnOrAfter(new DateTime().plusDays(2));
 		AudienceRestriction audienceRestriction = buildXMLObjectDefaultName(AudienceRestriction.class);
 		Audience audience = buildXMLObjectDefaultName(Audience.class);
-		audience.setAudienceURI(MockIDPProperties.getAudienceUri());
+		audience.setAudienceURI(MockIDPSPMetadata.getAudienceUri());
 		audienceRestriction.getAudiences().add(audience);
 		conditions.getAudienceRestrictions().add(audienceRestriction);
 		return conditions;
@@ -311,7 +315,7 @@ public class MockIDPArtifactResolve extends HttpServlet {
 
 	private EncryptedAssertion encryptAssertion(final Assertion assertion) throws KeyStoreException, NoSuchAlgorithmException, CertificateException,
 			IOException, SecurityException, EncryptionException, java.security.cert.CertificateException, NoSuchProviderException {
-		Credential keyEncryptionCredential = getSPPublicKey();
+		Credential keyEncryptionCredential = MockIDPSPMetadata.getSpCredentials();
 
 		EncryptionParameters encParams = new EncryptionParameters();
 		encParams.setAlgorithm(EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES128);
@@ -383,27 +387,10 @@ public class MockIDPArtifactResolve extends HttpServlet {
 		return envelope;
 	}
 
-	private X509Credential getIDPKeyFromKeystore() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException,
-			SecurityException, java.security.cert.CertificateException {
-		KeyStore keystore = KeyStore.getInstance(KeyStore.getDefaultType());
-		InputStream inputStream = MockIDPArtifactResolve.class.getResourceAsStream("/keystore-idp.jks");
-		keystore.load(inputStream, "changeit".toCharArray());
-		inputStream.close();
-
-		Map<String, String> passwordMap = new HashMap<String, String>();
-		passwordMap.put("test", "changeit");
-		KeyStoreCredentialResolver resolver = new KeyStoreCredentialResolver(keystore, passwordMap);
-
-		Criteria criteria = new EntityIDCriteria("test");
-		CriteriaSet criteriaSet = new CriteriaSet(criteria);
-
-		return (X509Credential)resolver.resolveSingle(criteriaSet);
-	}
-
-	private X509Credential getSPPublicKey() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException, SecurityException,
+	private X509Credential getIDPKeyFromKeystore() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException, SecurityException,
 			java.security.cert.CertificateException {
 		KeyStore keystore = KeyStore.getInstance(KeyStore.getDefaultType());
-		InputStream inputStream = MockIDPArtifactResolve.class.getResourceAsStream("/keystore-sp.jks");
+		InputStream inputStream = MockIDPArtifactResolve.class.getResourceAsStream("/keystore-idp.jks");
 		keystore.load(inputStream, "changeit".toCharArray());
 		inputStream.close();
 

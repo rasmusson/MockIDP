@@ -28,16 +28,16 @@ public class MockIDPProperties {
 		return (String)properties.get(key);
 	}
 
-	public static String getSpConsumerUrl() {
-		return (String)properties.get("spConsumerUrl");
-	}
-
-	public static String getAudienceUri() {
-		return (String)properties.get("audienceUri");
-	}
-
 	public static String getIdpEntityId() {
 		return "FakeIdP";
+	}
+
+	public static String getSpEntityId() {
+		return (String)properties.get("spEntityId");
+	}
+
+	public static String getSpMetadataLocation() {
+		return (String)properties.get("spMetadataLocation");
 	}
 
 }
