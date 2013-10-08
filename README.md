@@ -18,9 +18,6 @@ spMetadataLocation - The location of the sp-matedata.xml file
 sp-metadata.xml is a standard metadata file that is provided from the user.
 This file can typically be exported from the product that is used.
 
-Running the IDP
-===============
-
 Running with maven from source
 =======================
 
