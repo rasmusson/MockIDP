@@ -14,7 +14,7 @@ public class MockIDPProperties {
 
 	static {
 		try {
-			FileInputStream fi = new FileInputStream("./MockIDP.properties");
+			FileInputStream fi = new FileInputStream(System.getenv("MOCKIDP_PROPERTIES"));
 			properties.load(fi);
 			fi.close();
 		} catch (FileNotFoundException e) {
