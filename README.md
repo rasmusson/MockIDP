@@ -19,6 +19,9 @@ sp-metadata.xml is a standard metadata file that is provided from the user.
 This file can typically be exported from the product that is used.
 
 
+The path to the MockIDP.properties is by default ./MockIDP.properties if the file is placed elsewhere the
+MOCKIDP_PROPERTIES environment variable is used to specify this.
+
 The idp-metadata.xml shows an example of a metadata file that represents the services in the IDP.
 The only services that are actually supported are ArtifactResolutionService and SingleSignOnService 
 with HTTP-Redirect binding
