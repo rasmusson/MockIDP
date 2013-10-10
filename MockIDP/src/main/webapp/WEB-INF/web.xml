@@ -4,4 +4,23 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+  
+  <servlet>
+  <servlet-name>MockIDPAuthnReq</servlet-name>
+  <servlet-class>no.steras.mockidp.MockIDPAuthnReq</servlet-class>
+</servlet>
+  <servlet>
+  <servlet-name>MockIDPArtifactResolve</servlet-name>
+  <servlet-class>no.steras.mockidp.MockIDPArtifactResolve</servlet-class>
+</servlet>
+
+ <servlet-mapping>
+ <servlet-name>MockIDPAuthnReq</servlet-name>
+  <url-pattern>/openam/SSORedirect/metaAlias/idp</url-pattern>
+</servlet-mapping>
+ <servlet-mapping>
+ <servlet-name>MockIDPArtifactResolve</servlet-name>
+  <url-pattern>/openam/ArtifactResolver/metaAlias/idp</url-pattern>
+</servlet-mapping>
+
 </web-app>

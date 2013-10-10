@@ -13,7 +13,6 @@ import java.util.Map;
 
 import javax.security.cert.CertificateException;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -92,7 +91,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
-@WebServlet(urlPatterns = "/openam/ArtifactResolver/metaAlias/idp")
 public class MockIDPArtifactResolve extends HttpServlet {
 
 	@Override
