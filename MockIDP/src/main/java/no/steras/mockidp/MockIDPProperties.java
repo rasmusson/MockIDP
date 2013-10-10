@@ -14,7 +14,12 @@ public class MockIDPProperties {
 
 	static {
 		try {
-			FileInputStream fi = new FileInputStream(System.getenv("MOCKIDP_PROPERTIES"));
+			String propertiesPath = System.getenv("MOCKIDP_PROPERTIES");
+			if (propertiesPath == null) {
+				propertiesPath = "./MockIDP.properties";
+			}
+			
+			FileInputStream fi = new FileInputStream(propertiesPath);
 			properties.load(fi);
 			fi.close();
 		} catch (FileNotFoundException e) {
