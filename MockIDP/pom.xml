@@ -52,7 +52,7 @@
             
 	</dependencies>
 	<build>
-		<finalName>idportenMock</finalName>
+		<finalName>MockIDP</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.eclipse.jetty</groupId>
