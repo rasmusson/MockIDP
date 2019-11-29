@@ -60,7 +60,7 @@
 				<version>9.0.3.v20130506</version>
 				<configuration>
 					<httpConnector>
-						<port>9000</port>
+						<port>80</port>
 					</httpConnector>
 				</configuration>
 			</plugin>

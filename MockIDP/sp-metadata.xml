@@ -1,46 +1,77 @@
-<?xml version="1.0" encoding="UTF-8"?><md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" entityID="dev1">
-<md:SPSSODescriptor AuthnRequestsSigned="true" WantAssertionsSigned="true" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
-<md:KeyDescriptor use="signing">
-<ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
-<ds:X509Data>
-<ds:X509Certificate>MIIDBTCCAe2gAwIBAgIFANe8sckwDQYJKoZIhvcNAQEFBQAwETEPMA0GA1UEAwwGMjAwNzAxMB4X
-DTc5MTIzMTIzMDAwMFoXDTI5MTIzMTIzMDAwMFowYzEoMCYGA1UECgwfU2N5dGwgT25saW5lIFdv
-cmxkIFNlY3VyaXR5LCBTQTELMAkGA1UEBhMCRVMxFDASBgNVBAMMC1ZDU19sb2dTaWduMRQwEgYD
-VQQLDAtEZXZlbG9wbWVudDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAOyxrpfnygX1
-rDc+9ciiga2kMUSh3k7JakXdAchl+zKx0I1wYLh1ho/UsGm+Dh1X8FGcDLza/BP7EGxUpntxdJ7+
-HbUG51ZBMEihyzDwIGz8GXVzwFuD+k4a02GbPYMEXMmxAs7NueCQgvzKcyuxmjtRXZHudo3ncVbH
-VEeG3hrb3O8LqYVW2FC0UFqxJSnGQqhFcvTTPYa1b7q4375Dm2WxJKpeORdSz9FgVcqRDbLATCFE
-sugwKNbVAeJ6ZCKarz8bFOcO81lTo30YGXX7CKVX+Y4HG4kFFLQBE4q/l8qYX0vSsf/kFTu3Yhrh
-7jGxz1ValUC2GsvYGluP+YLdKYECAwEAAaMSMBAwDgYDVR0PAQH/BAQDAgbAMA0GCSqGSIb3DQEB
-BQUAA4IBAQCHrfKIq9auwXk67Sxsl71IOYypa99AogMKJt35sIP3RFLim6pjDz/0Fv06WT3UfO71
-3eMDOdlR7xE+lh4+tTkJ9sdyDYl7IwK/bnbg+hQps8KBAgTtL1jh23Ua1/2YVDAZwhrRX0aWepVe
-/J5vspKZhqTf3tI3UFjT4/I7P4uiPCvjcWyVjuPq/lTo60BYTUIZYzsTMrI5HoCJmPaSZkwU6RSD
-D0ng5aFIw46lMVV2HWimtcFCZLeHdoKaFgYTSLWb2kyN/0U2R76ll8MYQsoIQndWZOL++3ZXaVEA
-4QEyf6Id29RBwWw1lA22R93/s8wNALdrC/YDqqqcRfIIp3GI</ds:X509Certificate>
-</ds:X509Data>
-</ds:KeyInfo>
-</md:KeyDescriptor>
-<md:KeyDescriptor use="encryption">
-<ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
-<ds:X509Data>
-<ds:X509Certificate>MIIDBTCCAe2gAwIBAgIFANe8sckwDQYJKoZIhvcNAQEFBQAwETEPMA0GA1UEAwwGMjAwNzAxMB4X
-DTc5MTIzMTIzMDAwMFoXDTI5MTIzMTIzMDAwMFowYzEoMCYGA1UECgwfU2N5dGwgT25saW5lIFdv
-cmxkIFNlY3VyaXR5LCBTQTELMAkGA1UEBhMCRVMxFDASBgNVBAMMC1ZDU19sb2dTaWduMRQwEgYD
-VQQLDAtEZXZlbG9wbWVudDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAOyxrpfnygX1
-rDc+9ciiga2kMUSh3k7JakXdAchl+zKx0I1wYLh1ho/UsGm+Dh1X8FGcDLza/BP7EGxUpntxdJ7+
-HbUG51ZBMEihyzDwIGz8GXVzwFuD+k4a02GbPYMEXMmxAs7NueCQgvzKcyuxmjtRXZHudo3ncVbH
-VEeG3hrb3O8LqYVW2FC0UFqxJSnGQqhFcvTTPYa1b7q4375Dm2WxJKpeORdSz9FgVcqRDbLATCFE
-sugwKNbVAeJ6ZCKarz8bFOcO81lTo30YGXX7CKVX+Y4HG4kFFLQBE4q/l8qYX0vSsf/kFTu3Yhrh
-7jGxz1ValUC2GsvYGluP+YLdKYECAwEAAaMSMBAwDgYDVR0PAQH/BAQDAgbAMA0GCSqGSIb3DQEB
-BQUAA4IBAQCHrfKIq9auwXk67Sxsl71IOYypa99AogMKJt35sIP3RFLim6pjDz/0Fv06WT3UfO71
-3eMDOdlR7xE+lh4+tTkJ9sdyDYl7IwK/bnbg+hQps8KBAgTtL1jh23Ua1/2YVDAZwhrRX0aWepVe
-/J5vspKZhqTf3tI3UFjT4/I7P4uiPCvjcWyVjuPq/lTo60BYTUIZYzsTMrI5HoCJmPaSZkwU6RSD
-D0ng5aFIw46lMVV2HWimtcFCZLeHdoKaFgYTSLWb2kyN/0U2R76ll8MYQsoIQndWZOL++3ZXaVEA
-4QEyf6Id29RBwWw1lA22R93/s8wNALdrC/YDqqqcRfIIp3GI</ds:X509Certificate>
-</ds:X509Data>
-</ds:KeyInfo>
-</md:KeyDescriptor>
-<md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</md:NameIDFormat>
-<md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact" Location="https://admin-dev:2081/saml/consumer" index="0"/>
-</md:SPSSODescriptor>
-</md:EntityDescriptor>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<EntityDescriptor entityID="openam.stavanger.kommune.no" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
+    <SPSSODescriptor AuthnRequestsSigned="true" WantAssertionsSigned="true" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+        <KeyDescriptor use="signing">
+            <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+                <ds:X509Data>
+                    <ds:X509Certificate>
+MIIEjjCCA3agAwIBAgILEOk/ugHD5p6tB0UwDQYJKoZIhvcNAQEFBQAwSzELMAkGA1UEBhMCTk8x
+HTAbBgNVBAoMFEJ1eXBhc3MgQVMtOTgzMTYzMzI3MR0wGwYDVQQDDBRCdXlwYXNzIENsYXNzIDMg
+Q0EgMTAeFw0xMjA2MjkxMjI3NTVaFw0xNTA5MDQxMjQ4MDhaMFkxCzAJBgNVBAYTAk5PMRowGAYD
+VQQKDBFTVEFWQU5HRVIgS09NTVVORTEaMBgGA1UEAwwRU1RBVkFOR0VSIEtPTU1VTkUxEjAQBgNV
+BAUTCTk2NDk2NTIyNjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAJ/hUuaRZoroA9LZ
+pUODddFOJKYSsOIFM462ix+RVEkr+3EsvK3AOJhlZ87x5qvE3VMmT4U4hb3e7BP2kWqkYnjA6/1V
+mE2SlhA45YqMBTZyJaKQnTKJQtTVAt3kcqwXTFm4qeEZNhzDiHC7ClC8KSYZrxZrVHV0PYA730t+
+YoJmmg/b3myNqWt434w4FlfU46PdWm04cgL7SbHUZ1dawNqlD2tFsCGohuXJNVgWjUQK9R+ocvob
+nbbmRHqd6ltvqtM6enTB0Q7jEjdASSQjjVm0SO6/dZ9lRiHjw5Qd+Qmd7mL+O79rCyje5y3vkCLA
+dpTapxFLY/BsJqnTllA47PMCAwEAAaOCAWMwggFfMAkGA1UdEwQCMAAwHwYDVR0jBBgwFoAUOBTm
+yPCppAP0Tj4io1vy1uCtQHQwHQYDVR0OBBYEFJav8sd2o9AEpB0eRvpNk4SXavlGMA4GA1UdDwEB
+/wQEAwIEsDAVBgNVHSAEDjAMMAoGCGCEQgEaAQMCMIGlBgNVHR8EgZ0wgZowL6AtoCuGKWh0dHA6
+Ly9jcmwuYnV5cGFzcy5uby9jcmwvQlBDbGFzczNDQTEuY3JsMGegZaBjhmFsZGFwOi8vbGRhcC5i
+dXlwYXNzLm5vL2RjPUJ1eXBhc3MsZGM9Tk8sQ049QnV5cGFzcyUyMENsYXNzJTIwMyUyMENBJTIw
+MT9jZXJ0aWZpY2F0ZVJldm9jYXRpb25MaXN0MEMGCCsGAQUFBwEBBDcwNTAzBggrBgEFBQcwAYYn
+aHR0cDovL29jc3AuYnV5cGFzcy5uby9vY3NwL0JQQ2xhc3MzQ0ExMA0GCSqGSIb3DQEBBQUAA4IB
+AQCK9+azZxVtLzpwDqJdz5ezwgEqit2mjg/icJpuIFl/x7GizjGfm6OnnB/06dROb718ZkPgV0s/
+ffEBqgS1No85+iDIVREmciK4nWNHHOqDWEz4fxE3BQFzWJQ5LRO3jYkaLMyQTpm9wb+APWYlz6GQ
+YwHXK2xwKNgv6lCJsaP57IAh3uGgc2PVyesU9/k3Dk9AnmSsfwFXlcg7B5LaLr5U8OOJdDluGd9j
+Gq93SoonTVipKS9Aqx+byFI3aPOqAsduWv9O5/dG7yH+iRb96Vh212yJ1UsLMUw8NwCNplwN9gBL
+egXzYi0PMXKoCqDW1zP1KpJtpoBojXu+It/Ffu+l
+                    </ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </KeyDescriptor>
+        <KeyDescriptor use="encryption">
+            <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+                <ds:X509Data>
+                    <ds:X509Certificate>
+MIIEjjCCA3agAwIBAgILEOk/ugHD5p6tB0UwDQYJKoZIhvcNAQEFBQAwSzELMAkGA1UEBhMCTk8x
+HTAbBgNVBAoMFEJ1eXBhc3MgQVMtOTgzMTYzMzI3MR0wGwYDVQQDDBRCdXlwYXNzIENsYXNzIDMg
+Q0EgMTAeFw0xMjA2MjkxMjI3NTVaFw0xNTA5MDQxMjQ4MDhaMFkxCzAJBgNVBAYTAk5PMRowGAYD
+VQQKDBFTVEFWQU5HRVIgS09NTVVORTEaMBgGA1UEAwwRU1RBVkFOR0VSIEtPTU1VTkUxEjAQBgNV
+BAUTCTk2NDk2NTIyNjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAJ/hUuaRZoroA9LZ
+pUODddFOJKYSsOIFM462ix+RVEkr+3EsvK3AOJhlZ87x5qvE3VMmT4U4hb3e7BP2kWqkYnjA6/1V
+mE2SlhA45YqMBTZyJaKQnTKJQtTVAt3kcqwXTFm4qeEZNhzDiHC7ClC8KSYZrxZrVHV0PYA730t+
+YoJmmg/b3myNqWt434w4FlfU46PdWm04cgL7SbHUZ1dawNqlD2tFsCGohuXJNVgWjUQK9R+ocvob
+nbbmRHqd6ltvqtM6enTB0Q7jEjdASSQjjVm0SO6/dZ9lRiHjw5Qd+Qmd7mL+O79rCyje5y3vkCLA
+dpTapxFLY/BsJqnTllA47PMCAwEAAaOCAWMwggFfMAkGA1UdEwQCMAAwHwYDVR0jBBgwFoAUOBTm
+yPCppAP0Tj4io1vy1uCtQHQwHQYDVR0OBBYEFJav8sd2o9AEpB0eRvpNk4SXavlGMA4GA1UdDwEB
+/wQEAwIEsDAVBgNVHSAEDjAMMAoGCGCEQgEaAQMCMIGlBgNVHR8EgZ0wgZowL6AtoCuGKWh0dHA6
+Ly9jcmwuYnV5cGFzcy5uby9jcmwvQlBDbGFzczNDQTEuY3JsMGegZaBjhmFsZGFwOi8vbGRhcC5i
+dXlwYXNzLm5vL2RjPUJ1eXBhc3MsZGM9Tk8sQ049QnV5cGFzcyUyMENsYXNzJTIwMyUyMENBJTIw
+MT9jZXJ0aWZpY2F0ZVJldm9jYXRpb25MaXN0MEMGCCsGAQUFBwEBBDcwNTAzBggrBgEFBQcwAYYn
+aHR0cDovL29jc3AuYnV5cGFzcy5uby9vY3NwL0JQQ2xhc3MzQ0ExMA0GCSqGSIb3DQEBBQUAA4IB
+AQCK9+azZxVtLzpwDqJdz5ezwgEqit2mjg/icJpuIFl/x7GizjGfm6OnnB/06dROb718ZkPgV0s/
+ffEBqgS1No85+iDIVREmciK4nWNHHOqDWEz4fxE3BQFzWJQ5LRO3jYkaLMyQTpm9wb+APWYlz6GQ
+YwHXK2xwKNgv6lCJsaP57IAh3uGgc2PVyesU9/k3Dk9AnmSsfwFXlcg7B5LaLr5U8OOJdDluGd9j
+Gq93SoonTVipKS9Aqx+byFI3aPOqAsduWv9O5/dG7yH+iRb96Vh212yJ1UsLMUw8NwCNplwN9gBL
+egXzYi0PMXKoCqDW1zP1KpJtpoBojXu+It/Ffu+l
+                    </ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+            <EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes128-cbc">
+                <xenc:KeySize xmlns:xenc="http://www.w3.org/2001/04/xmlenc#">128</xenc:KeySize>
+</EncryptionMethod>
+        </KeyDescriptor>
+        <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://aktivby.stavanger.kommune.no:443/idporten/SPSloRedirect/metaAlias/idporten/sp" ResponseLocation="https://aktivby.stavanger.kommune.no:443/idporten/SPSloRedirect/metaAlias/idporten/sp"/>
+        <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://aktivby.stavanger.kommune.no:443/idporten/SPSloPOST/metaAlias/idporten/sp" ResponseLocation="https://aktivby.stavanger.kommune.no:443/idporten/SPSloPOST/metaAlias/idporten/sp"/>
+        <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://aktivby.stavanger.kommune.no:443/idporten/SPSloSoap/metaAlias/idporten/sp"/>
+        <ManageNameIDService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://aktivby.stavanger.kommune.no:443/idporten/SPMniRedirect/metaAlias/idporten/sp" ResponseLocation="https://aktivby.stavanger.kommune.no:443/idporten/SPMniRedirect/metaAlias/idporten/sp"/>
+        <ManageNameIDService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://aktivby.stavanger.kommune.no:443/idporten/SPMniPOST/metaAlias/idporten/sp" ResponseLocation="https://aktivby.stavanger.kommune.no:443/idporten/SPMniPOST/metaAlias/idporten/sp"/>
+        <ManageNameIDService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://aktivby.stavanger.kommune.no:443/idporten/SPMniSoap/metaAlias/idporten/sp" ResponseLocation="https://aktivby.stavanger.kommune.no:443/idporten/SPMniSoap/metaAlias/idporten/sp"/>
+        <NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</NameIDFormat>
+        <AssertionConsumerService index="0" isDefault="true" Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact" Location="https://aktivby.stavanger.kommune.no:443/idporten/Consumer/metaAlias/idporten/sp"/>
+        <AssertionConsumerService index="1" Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://aktivby.stavanger.kommune.no:443/idporten/Consumer/metaAlias/idporten/sp"/>
+        <AssertionConsumerService index="2" Binding="urn:oasis:names:tc:SAML:2.0:bindings:PAOS" Location="https://aktivby.stavanger.kommune.no:443/idporten/Consumer/ECP/metaAlias/idporten/sp"/>
+    </SPSSODescriptor>
+</EntityDescriptor>
+
